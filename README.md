@@ -15,6 +15,15 @@ The current project contains the following features:
 * integration of both Java and Scala codes in a single code base
 * self-deployment of spark job into mesos-sphere and chronos
 
+# ETL Flow
+
+The application follows the following ETL flow:
+
+* Step 1: data is extracted from mysql or mariadb database
+* Step 2: data is transformed using spark 
+* Step 3: transformed data is then stored into into hadoop distributed file system (HDFS)
+* Step 4: spark+graphx job is then run by load HDFS data into a graph structure and run graph mining
+
 # Database Configuration
 
 To use this project create a database named my_sga in your mysql database (make sure it is running at localhost:3306)
