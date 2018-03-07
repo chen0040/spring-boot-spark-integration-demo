@@ -2,6 +2,19 @@
 
 Demo on how to integrate Spring and Apache spark
 
+# Features
+
+The current project contains the following features:
+
+* loading data from mariadb or mysql using spring-data-jpa
+* spring boot support 
+* spark for big data analytics
+* hadoop integration
+* redis for publishing spark job progress
+* graphx from graph mining such as page rank
+* integration of both Java and Scala codes in a single code base
+* self-deployment of spark job into mesos-sphere and chronos
+
 # Database Configuration
 
 To use this project create a database named my_sga in your mysql database (make sure it is running at localhost:3306)
