@@ -59,7 +59,7 @@ public class CompanyRuleMinerImpl implements CompanyRuleMiner {
 
 
    @Override public void run(JavaSparkContext context, JavaPairRDD<String, String> skillCompanyRdd, int partitionCount) throws IOException {
-      JavaPairRDD<String, Tuple2<String, Optional<String>>> rdd1 = skillCompanyRdd.leftOuterJoin(skillCompanyRdd);
+      JavaPairRDD<String, Tuple2<String, Optional<String>>> rdd1 = (JavaPairRDD<String, Tuple2<String, Optional<String>>>)skillCompanyRdd.leftOuterJoin(skillCompanyRdd);
 
       rdd1 = rdd1.coalesce(partitionCount).cache();
 

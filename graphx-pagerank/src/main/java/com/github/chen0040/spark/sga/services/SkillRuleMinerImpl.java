@@ -73,7 +73,7 @@ public class SkillRuleMinerImpl implements SkillRuleMiner {
 
       logger.info("company-skill: {}", count);
 
-      JavaPairRDD<String, Tuple2<String, Optional<String>>> rdd1 = companySkillRdd.leftOuterJoin(companySkillRdd);
+      JavaPairRDD<String, Tuple2<String, Optional<String>>> rdd1 = (JavaPairRDD<String, Tuple2<String, Optional<String>>>)companySkillRdd.leftOuterJoin(companySkillRdd);
 
       rdd1 = rdd1.coalesce(partitionCount).cache();
 

@@ -64,7 +64,7 @@ public interface SkillAssocEntityRepository extends CrudRepository<SkillAssocEnt
    @Query(value = "SELECT new com.github.chen0040.data.sga.viewmodels.SkillAssocAggregate(skills, count(s.skills)) FROM SkillAssocEntity s WHERE s.groupSize = ?2 AND LOWER(s.skills) LIKE CONCAT('%', CONCAT(?1, '%')) GROUP BY s.skills ORDER BY count(s.skills) DESC")
    Slice<SkillAssocAggregate> findCountByMultipleSkills(String skilllike1, int groupSize, Pageable pageable);
 
-   @Query(value = "SELECT new com.github.chen0040.data.sga.viewmodels.SkillAssocAggregate(skills, count(s.skills)) FROM SkillAssocEntity s WHERE s.groupSize = ?4 AND LOWER(s.skills) LIKE CONCAT('%', CONCAT(?1, '%')) AND LOWER(s.skills) LIKE CONCAT('%', CONCAT(?2, '%')) AND LOWER(s.skills) LIKE %?3% GROUP BY s.skills ORDER BY count(s.skills) DESC")
+   @Query(value = "SELECT new com.github.chen0040.data.sga.viewmodels.SkillAssocAggregate(skills, count(s.skills)) FROM SkillAssocEntity s WHERE s.groupSize = ?4 AND LOWER(s.skills) LIKE CONCAT('%', CONCAT(?1, '%')) AND LOWER(s.skills) LIKE CONCAT('%', CONCAT(?2, '%')) AND LOWER(s.skills) LIKE CONCAT('%', CONCAT(?3, '%')) GROUP BY s.skills ORDER BY count(s.skills) DESC")
    Slice<SkillAssocAggregate> findCountByMultipleSkills(String skilllike1, String skilllike2, String skilllike3, int groupSize, Pageable pageable);
 
    @Query(value = "SELECT new com.github.chen0040.data.sga.viewmodels.SkillAssocAggregate(skills, count(s.skills)) FROM SkillAssocEntity s WHERE s.groupSize = ?3 AND LOWER(s.skills) LIKE CONCAT('%', CONCAT(?1, '%')) AND LOWER(s.skills) LIKE CONCAT('%', CONCAT(?2, '%')) GROUP BY s.skills ORDER BY count(s.skills) DESC")
