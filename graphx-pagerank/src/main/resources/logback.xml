@@ -1,0 +1,128 @@
+<configuration>
+
+    <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+
+    <!-- logging to rolling file (i.e. file that goes into next file when exceeding in date or size -->
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator>
+            <key>nodeid</key>
+            <defaultValue>spark-graph-miner</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="ROLLING-${nodeid}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>/home/chen0040/spring-spark-demo/logs/ssd-${nodeid}.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <fileNamePattern>/home/chen0040/spring-spark-demo/logs/ssd-${nodeid}-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+                    <timeBasedFileNamingAndTriggeringPolicy
+                            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                        <maxFileSize>200MB</maxFileSize>
+                    </timeBasedFileNamingAndTriggeringPolicy>
+                    <!-- keep 3 days' worth of history -->
+                    <maxHistory>3</maxHistory>
+                </rollingPolicy>
+                <encoder>
+                    <pattern>%date{yyyy-MM-dd} %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+
+    <!-- logging to console -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{yyyy-MM-dd} %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="i.s.c.config.discovery.NodeChecker">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="SIFT"/>
+    </logger>
+
+
+
+    <appender name="SYSLOG-UDP-DEV" class="com.papertrailapp.logback.Syslog4jAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%-5level %logger{35}: %m%n%xEx</pattern>
+        </layout>
+
+        <syslogConfig class="org.productivity.java.syslog4j.impl.net.udp.UDPNetSyslogConfig">
+            <!-- remote system to log to -->
+            <host>syslog4j-server-host-name</host>
+            <!-- remote port to log to -->
+            <port>8089</port>
+            <!-- program name to log as -->
+            <ident>my-spark-graph-miner</ident>
+            <!-- max log message length in bytes -->
+            <maxMessageLength>128000</maxMessageLength>
+        </syslogConfig>
+    </appender>
+
+    <appender name="SYSLOG-UDP-PROD" class="com.papertrailapp.logback.Syslog4jAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%-5level %logger{35}: %m%n%xEx</pattern>
+        </layout>
+
+        <syslogConfig class="org.productivity.java.syslog4j.impl.net.udp.UDPNetSyslogConfig">
+            <!-- remote system to log to -->
+            <host>syslog4j-server-host-name</host>
+            <!-- remote port to log to -->
+            <port>8089</port>
+            <!-- program name to log as -->
+            <ident>my-spark-graph-miner</ident>
+            <!-- max log message length in bytes -->
+            <maxMessageLength>128000</maxMessageLength>
+        </syslogConfig>
+    </appender>
+
+    <appender name="SYSLOG-UDP-DEFAULT" class="com.papertrailapp.logback.Syslog4jAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%-5level %logger{35}: %m%n%xEx</pattern>
+        </layout>
+
+        <syslogConfig class="org.productivity.java.syslog4j.impl.net.udp.UDPNetSyslogConfig">
+            <!-- remote system to log to -->
+            <host>localhost</host>
+            <!-- remote port to log to -->
+            <port>8089</port>
+            <!-- program name to log as -->
+            <ident>my-spark-graph-miner</ident>
+            <!-- max log message length in bytes -->
+            <maxMessageLength>128000</maxMessageLength>
+        </syslogConfig>
+    </appender>
+
+
+
+    <if condition='isDefined("spring.profiles.active")'>
+        <else>
+            <root level="INFO">
+                <appender-ref ref="SIFT"/>
+                <appender-ref ref="STDOUT" />
+            </root>
+        </else>
+    </if>
+
+    <if condition='property("spring.profiles.active").contains("development")'>
+        <then>
+            <root level="INFO">
+                <appender-ref ref="SIFT"/>
+                <appender-ref ref="STDOUT" />
+                <appender-ref ref="SYSLOG-UDP-DEV" />
+            </root>
+        </then>
+    </if>
+
+    <if condition='property("spring.profiles.active").contains("production")'>
+        <then>
+            <root level="INFO">
+                <appender-ref ref="SIFT"/>
+                <appender-ref ref="STDOUT" />
+                <appender-ref ref="SYSLOG-UDP-PROD" />
+            </root>
+        </then>
+    </if>
+
+
+</configuration>
