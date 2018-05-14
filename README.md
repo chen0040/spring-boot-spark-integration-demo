@@ -1,6 +1,6 @@
 # spring-boot-spark-integration-demo
 
-Demo on how to integrate Spring and Apache spark
+Demo on how to integrate Spring, Apache spark and GraphX, with Java and Scala mixed codes 
 
 # Features
 
